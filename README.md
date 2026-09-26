@@ -1,155 +1,329 @@
-# arules --- Mining Association Rules and Frequent Itemsets with R
 
-[![CRAN version](http://www.r-pkg.org/badges/version/arules)](https://cran.r-project.org/package=arules)
- [![Rdoc](http://www.rdocumentation.org/badges/version/arules)](http://www.rdocumentation.org/packages/arules) 
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/arules)](https://cran.r-project.org/package=arules)
-[![Travis-CI Build Status](https://travis-ci.org/mhahsler/arules.svg?branch=master)](https://travis-ci.org/mhahsler/arules)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mhahsler/arules?branch=master&svg=true)](https://ci.appveyor.com/project/mhahsler/arules)
+# <img src="man/figures/logo.svg" align="right" height="139" /> R package arules - Mining Association Rules and Frequent Itemsets
 
-The arules package for R provides the infrastructure for representing,
-manipulating and analyzing transaction data and patterns (frequent
-itemsets and association rules). Also provides interfaces to
-C implementations of the association mining algorithms Apriori and Eclat.
+[![Package on
+CRAN](https://www.r-pkg.org/badges/version/arules)](https://CRAN.R-project.org/package=arules)
+[![CRAN RStudio mirror
+downloads](https://cranlogs.r-pkg.org/badges/arules)](https://CRAN.R-project.org/package=arules)
+![License](https://img.shields.io/cran/l/arules)
+[![Anaconda.org](https://anaconda.org/conda-forge/r-arules/badges/version.svg)](https://anaconda.org/conda-forge/r-arules)
+[![r-universe
+status](https://mhahsler.r-universe.dev/badges/arules)](https://mhahsler.r-universe.dev/arules)
+[![StackOverflow](https://img.shields.io/badge/stackoverflow-arules-orange.svg)](https://stackoverflow.com/questions/tagged/arules)
 
-### arules core packages: 
+**Maintainer:** [Michael Hahsler](https://michael.hahsler.net)
 
-* [arules](https://cran.r-project.org/package=arules): arules base package with data structures, mining algorithms (APRIORI and ECLAT), interest measures. 
-* [arulesViz](https://cran.r-project.org/package=arulesViz): Visualization of association rules. 
-* [arulesCBA](https://cran.r-project.org/package=arulesCBA): Classification algorithms based on association rules (includes CBA).  
-* [arulesSequences](https://cran.r-project.org/package=arulesSequences):
-   Mining frequent sequences (cSPADE).
+## Introduction
 
-### Other related packages:
+The arules package family for R provides the infrastructure for
+representing, manipulating and analyzing transaction data and patterns
+using [frequent itemsets and association
+rules](https://en.wikipedia.org/wiki/Association_rule_learning). The
+package also provides a wide range of [interest
+measures](https://mhahsler.github.io/arules/docs/measures) and mining
+algorithms including the code of Christian Borgelt’s popular and
+efficient C implementations of the association mining algorithms
+[Apriori](https://borgelt.net/apriori.html) and
+[Eclat](https://borgelt.net/eclat.html). In addition, the following
+mining algorithms are available via
+[fim4r](https://borgelt.net/fim4r.html):
 
-#### Additional mining algorithms 
+- Apriori
+- Eclat
+- Carpenter
+- FPgrowth
+- IsTa
+- RElim
+- SaM
 
-* [arulesNBMiner](https://cran.r-project.org/package=arulesNBMiner):
-  Mining NB-frequent itemsets and NB-precise rules.
-* [opusminer](https://cran.r-project.org/package=opusminer): OPUS Miner algorithm for filtered top-k association discovery.
-* [RKEEL](https://cran.r-project.org/package=RKEEL): Interface to KEEL's association rule mining algorithm.
-* [RSarules](https://cran.r-project.org/package=RSarules): Mining algorithm which randomly samples association rules with one pre-chosen item as the consequent from a transaction dataset.
+Code examples can be found in [Chapter 5 of the web book R Companion for
+Introduction to Data
+Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/association-analysis-basic-concepts.html).
 
+To cite package ‘arules’ in publications use:
 
-#### In-database analytics
+> Hahsler M, Gruen B, Hornik K (2005). “arules - A Computational
+> Environment for Mining Association Rules and Frequent Item Sets.”
+> *Journal of Statistical Software*, *14*(15), 1-25. ISSN 1548-7660.
+> <doi:10.18637/jss.v014.i15> <https://doi.org/10.18637/jss.v014.i15>.
 
-* [ibmdbR](https://cran.r-project.org/package=ibmdbR): IBM in-database analytics for R can calculate association rules from a database table.
-* [rfml](https://cran.r-project.org/package=rfml): Mine frequent itemsets or association rules using a MarkLogic server. 
+    @Article{,
+      title = {arules -- {A} Computational Environment for Mining Association Rules and Frequent Item Sets},
+      author = {Michael Hahsler and Bettina Gruen and Kurt Hornik},
+      year = {2005},
+      journal = {Journal of Statistical Software},
+      volume = {14},
+      number = {15},
+      pages = {1--25},
+      doi = {10.18637/jss.v014.i15},
+      month = {October},
+      issn = {1548-7660},
+    }
 
-#### Interface
+## Packages
 
-* [rattle](https://cran.r-project.org/package=rattle): Provides a graphical user interface for association rule mining.
-* [pmml](https://cran.r-project.org/package=pmml): Generates PMML (predictive model markup language) for association rules.
+### arules core packages
 
-#### Classification 
+- [arules](https://cran.r-project.org/package=arules): arules base
+  package with data structures, mining algorithms (APRIORI and ECLAT),
+  interest measures.
+- [arulesViz](https://github.com/mhahsler/arulesViz): Visualization of
+  association rules.
+- [arulesCBA](https://github.com/mhahsler/arulesCBA): Classification
+  algorithms based on association rules (includes CBA).  
+- [arulesSequences](https://cran.r-project.org/package=arulesSequences):
+  Mining frequent sequences (cSPADE).
 
-* [arc](https://cran.r-project.org/package=arc): Alternative CBA implementation. 
-* [rCBA](https://cran.r-project.org/package=rCBA): Alternative CBA implementation.
-* [sblr](https://cran.r-project.org/package=sbrl): Scalable Bayesian rule lists algorithm for classification.
+### Other related packages
 
-#### Recommendation/Prediction
+Additional mining algorithms
 
-* [recommenerlab](https://cran.r-project.org/package=recommenderlab): Supports creating predictions using association rules.
+- [arulesNBMiner](https://github.com/mhahsler/arulesNBMiner): Mining
+  NB-frequent itemsets and NB-precise rules.
+- [fim4r](https://borgelt.net/fim4r.html): Provides fast implementations
+  for several mining algorithms. An interface function called `fim4r()`
+  is provided in `arules`.
+- [opusminer](https://cran.r-project.org/package=opusminer): OPUS Miner
+  algorithm for finding the top-k productive, non-redundant itemsets.
+  Call `opus()` with `format = 'itemsets'`.
 
+In-database analytics
+
+- [ibmdbR](https://cran.r-project.org/package=ibmdbR): IBM in-database
+  analytics for R can calculate association rules from a database table.
+
+Interface
+
+- [rattle](https://cran.r-project.org/package=rattle): Provides a
+  graphical user interface for association rule mining.
+- [pmml](https://cran.r-project.org/package=pmml): Generates PMML
+  (predictive model markup language) for association rules.
+
+Classification
+
+- [arc](https://cran.r-project.org/package=arc): Alternative CBA
+  implementation.
+- [rCBA](https://cran.r-project.org/package=rCBA): Alternative CBA
+  implementation.
+- [qCBA](https://cran.r-project.org/package=qCBA): Quantitative
+  Classification by Association Rules.
+- [sblr](https://cran.r-project.org/package=sbrl): Scalable Bayesian
+  rule lists algorithm for classification.
+
+Recommendation/Prediction
+
+- [recommenderlab](https://github.com/mhahsler/recommenderlab): Supports
+  creating predictions using association rules.
+
+The following R packages use `arules`:
+[arc](https://CRAN.R-project.org/package=arc),
+[arlclustering](https://CRAN.R-project.org/package=arlclustering),
+[arulesCBA](https://CRAN.R-project.org/package=arulesCBA),
+[arulesNBMiner](https://CRAN.R-project.org/package=arulesNBMiner),
+[arulesSequences](https://CRAN.R-project.org/package=arulesSequences),
+[arulesViz](https://CRAN.R-project.org/package=arulesViz),
+[clickstream](https://CRAN.R-project.org/package=clickstream),
+[CLONETv2](https://CRAN.R-project.org/package=CLONETv2),
+[CRE](https://CRAN.R-project.org/package=CRE),
+[ctsem](https://CRAN.R-project.org/package=ctsem),
+[daltoolbox](https://CRAN.R-project.org/package=daltoolbox),
+[discnorm](https://CRAN.R-project.org/package=discnorm),
+[fcaR](https://CRAN.R-project.org/package=fcaR),
+[fdm2id](https://CRAN.R-project.org/package=fdm2id),
+[gp3sequences](https://CRAN.R-project.org/package=gp3sequences),
+[GroupBN](https://CRAN.R-project.org/package=GroupBN),
+[ibmdbR](https://CRAN.R-project.org/package=ibmdbR),
+[icdhelper](https://CRAN.R-project.org/package=icdhelper),
+[manydist](https://CRAN.R-project.org/package=manydist),
+[nuggets](https://CRAN.R-project.org/package=nuggets),
+[opusminer](https://CRAN.R-project.org/package=opusminer),
+[pervasive](https://CRAN.R-project.org/package=pervasive),
+[pmml](https://CRAN.R-project.org/package=pmml),
+[qCBA](https://CRAN.R-project.org/package=qCBA),
+[RareComb](https://CRAN.R-project.org/package=RareComb),
+[rattle](https://CRAN.R-project.org/package=rattle),
+[rCBA](https://CRAN.R-project.org/package=rCBA),
+[recommenderlab](https://CRAN.R-project.org/package=recommenderlab),
+[rgnoisefilt](https://CRAN.R-project.org/package=rgnoisefilt),
+[RulesTools](https://CRAN.R-project.org/package=RulesTools),
+[sbrl](https://CRAN.R-project.org/package=sbrl),
+[SurvivalTests](https://CRAN.R-project.org/package=SurvivalTests),
+[TELP](https://CRAN.R-project.org/package=TELP),
+[tidylearn](https://CRAN.R-project.org/package=tidylearn)
 
 ## Installation
 
-__Stable CRAN version:__ install from within R with
-```R
+**Stable CRAN version:** Install from within R with
+
+``` r
 install.packages("arules")
 ```
-__Current development version:__ Download package from [AppVeyor](https://ci.appveyor.com/project/mhahsler/arules/build/artifacts) or install from GitHub (needs devtools). 
-```R 
-library("devtools")
-install_github("mhahsler/arules")
-``` 
+
+**Current development version:** Install from
+[r-universe.](https://mhahsler.r-universe.dev/arules)
+
+``` r
+install.packages("arules",
+    repos = c("https://mhahsler.r-universe.dev",
+              "https://cloud.r-project.org/"))
+```
 
 ## Usage
 
 Load package and mine some association rules.
-```R
+
+``` r
 library("arules")
-data("Adult")
+data("IncomeESL")
 
-rules <- apriori(Adult, parameter = list(supp = 0.5, conf = 0.9, target = "rules"))
+trans <- transactions(IncomeESL)
+trans
 ```
 
-```
-Parameter specification:
- confidence minval smax arem  aval originalSupport support minlen maxlen target   ext
-        0.9    0.1    1 none FALSE            TRUE     0.5      1     10  rules FALSE
+    ## transactions in sparse format with
+    ##  8993 transactions (rows) and
+    ##  84 items (columns)
 
-Algorithmic control:
- filter tree heap memopt load sort verbose
-    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
-
-Absolute minimum support count: 24421 
-
-apriori - find association rules with the apriori algorithm
-version 4.21 (2004.05.09)        (c) 1996-2004   Christian Borgelt
-set item appearances ...[0 item(s)] done [0.00s].
-set transactions ...[115 item(s), 48842 transaction(s)] done [0.03s].
-sorting and recoding items ... [9 item(s)] done [0.00s].
-creating transaction tree ... done [0.03s].
-checking subsets of size 1 2 3 4 done [0.00s].
-writing ... [52 rule(s)] done [0.00s].
-creating S4 object  ... done [0.01s].
+``` r
+rules <- apriori(trans, supp = 0.1, conf = 0.9, target = "rules")
 ```
 
-Show basic statistics.
-```R
-summary(rules)
+    ## Apriori
+    ## 
+    ## Parameter specification:
+    ##  confidence minval smax arem  aval originalSupport maxtime support minlen
+    ##         0.9    0.1    1 none FALSE            TRUE       5     0.1      1
+    ##  maxlen target  ext
+    ##      10  rules TRUE
+    ## 
+    ## Algorithmic control:
+    ##  filter tree heap memopt load sort verbose
+    ##     0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+    ## 
+    ## Absolute minimum support count: 899 
+    ## 
+    ## set item appearances ...[0 item(s)] done [0.00s].
+    ## set transactions ...[84 item(s), 8993 transaction(s)] done [0.01s].
+    ## sorting and recoding items ... [42 item(s)] done [0.00s].
+    ## creating transaction tree ... done [0.00s].
+    ## checking subsets of size 1 2 3 4 5 6 done [0.02s].
+    ## writing ... [457 rule(s)] done [0.00s].
+    ## creating S4 object  ... done [0.00s].
+
+Inspect the rules with the highest lift.
+
+``` r
+inspect(head(rules, n = 3, by = "lift"))
 ```
 
+    ##     lhs                           rhs                      support confidence coverage lift count
+    ## [1] {dual incomes=no,                                                                            
+    ##      householder status=own}   => {marital status=married}    0.10       0.97     0.10  2.6   914
+    ## [2] {years in bay area=>10,                                                                      
+    ##      dual incomes=yes,                                                                           
+    ##      type of home=house}       => {marital status=married}    0.10       0.96     0.10  2.6   902
+    ## [3] {dual incomes=yes,                                                                           
+    ##      householder status=own,                                                                     
+    ##      type of home=house,                                                                         
+    ##      language in home=english} => {marital status=married}    0.11       0.96     0.11  2.6   988
+
+The following short guides cover the main workflows:
+
+- [Getting
+  started](https://mhahsler.r-universe.dev/articles/arules/getting-started.html)
+- [Preparing transaction
+  data](https://mhahsler.r-universe.dev/articles/arules/preparing-transaction-data.html)
+- [Mining and pruning
+  rules](https://mhahsler.r-universe.dev/articles/arules/mining-and-pruning-rules.html)
+- [Interest
+  measures](https://mhahsler.r-universe.dev/articles/arules/interest-measures.html)
+- [Item
+  hierarchies](https://mhahsler.r-universe.dev/articles/arules/item-hierarchies.html)
+
+The theoretical background and the original description of the package
+are available in the paper [Introduction to
+arules](https://mhahsler.r-universe.dev/articles/arules/arules.pdf).
+
+## Using arules with tidyverse
+
+`arules` works seamlessly with [tidyverse](https://tidyverse.org/). For
+example:
+
+- `dplyr` can be used for cleaning and preparing the transactions.
+- `transactions()` and other functions accept `tibble` as input.
+- Functions in arules can be connected with the pipe operator `|>`.
+- [arulesViz](https://github.com/mhahsler/arulesViz) provides
+  visualizations based on `ggplot2`.
+
+For example, we can remove the ethnic information column before creating
+transactions and then mine and inspect rules.
+
+``` r
+library("tidyverse")
+library("arules")
+data("IncomeESL")
+
+trans <- IncomeESL |>
+  select(-`ethnic classification`) |>
+  transactions()
+rules <- trans |>
+  apriori(
+    supp = 0.1, conf = 0.9, target = "rules",
+    control = list(verbose = FALSE)
+  )
+rules |>
+  head(3, by = "lift") |>
+  as("data.frame") |>
+  tibble()
 ```
-set of 52 rules
 
-rule length distribution (lhs + rhs):
- 1  2  3  4 
- 2 13 24 13 
+    ## # A tibble: 3 × 6
+    ##   rules                                  support confidence coverage  lift count
+    ##   <chr>                                    <dbl>      <dbl>    <dbl> <dbl> <int>
+    ## 1 {dual incomes=no,householder status=o…   0.102      0.971    0.105  2.62   914
+    ## 2 {years in bay area=>10,dual incomes=y…   0.100      0.961    0.104  2.59   902
+    ## 3 {dual incomes=yes,householder status=…   0.110      0.960    0.114  2.59   988
 
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   2.000   3.000   2.923   3.250   4.000 
+## Using arules from Python
 
-summary of quality measures:
-    support         confidence          lift       
- Min.   :0.5084   Min.   :0.9031   Min.   :0.9844  
- 1st Qu.:0.5415   1st Qu.:0.9155   1st Qu.:0.9937  
- Median :0.5974   Median :0.9229   Median :0.9997  
- Mean   :0.6436   Mean   :0.9308   Mean   :1.0036  
- 3rd Qu.:0.7426   3rd Qu.:0.9494   3rd Qu.:1.0057  
- Max.   :0.9533   Max.   :0.9583   Max.   :1.0586  
+`arules` and `arulesViz` can now be used directly from Python with the
+Python package [`arulespy`](https://pypi.org/project/arulespy/)
+available from PyPI.
 
-mining info:
-  data ntransactions support confidence
- Adult         48842     0.5        0.9
-```
+## Support
 
-Inspect rules with the highest lift.
-```R
-inspect(head(rules, by = "lift"))
-```
-
-```
-    lhs                               rhs                              support confidence     lift
-[1] {sex=Male,                                                                                    
-     native-country=United-States} => {race=White}                   0.5415421  0.9051090 1.058554
-[2] {sex=Male,                                                                                    
-     capital-loss=None,                                                                           
-     native-country=United-States} => {race=White}                   0.5113632  0.9032585 1.056390
-[3] {race=White}                   => {native-country=United-States} 0.7881127  0.9217231 1.027076
-[4] {race=White,                                                                                  
-     capital-loss=None}            => {native-country=United-States} 0.7490480  0.9205626 1.025783
-[5] {race=White,                                                                                  
-     sex=Male}                     => {native-country=United-States} 0.5415421  0.9204803 1.025691
-[6] {race=White,                                                                                  
-     capital-gain=None}            => {native-country=United-States} 0.7194628  0.9202807 1.025469
-```
+Please report bugs [here on
+GitHub.](https://github.com/mhahsler/arules/issues) Questions should be
+posted on [stackoverflow and tagged with
+arules](https://stackoverflow.com/questions/tagged/arules).
 
 ## References
 
-* [Intro article with examples](https://cran.r-project.org/package=arules/vignettes/arules.pdf) by Michael Hahsler, Bettina Gr&uuml;n, Kurt Hornik and
-Christian Buchta.
-* Michael Hahsler, Bettina Gr&uuml;n and Kurt Hornik, [arules - A Computational Environment for Mining Association Rules and Frequent Item Sets.](http://dx.doi.org/10.18637/jss.v014.i15) _Journal of Statistical Software,_ 14(15), 2005.
-* Michael Hahsler, Sudheer Chelluboina, Kurt Hornik, and Christian Buchta. [The arules R-package ecosystem: Analyzing interesting patterns from large transaction datasets.](http://jmlr.csail.mit.edu/papers/v12/hahsler11a.html) _Journal of Machine Learning Research,_ 12:1977-1981, 2011.
-* Hahsler, Michael (2015). 
-[A Probabilistic Comparison of Commonly Used Interest Measures for Association Rules](http://michael.hahsler.net/research/association_rules/measures.html), 2015, URL: http://michael.hahsler.net/research/association_rules/measures.html.
+- Michael Hahsler, Bettina Grün and Kurt Hornik. [arules - A
+  Computational Environment for Mining Association Rules and Frequent
+  Item Sets.](https://dx.doi.org/10.18637/jss.v014.i15) *Journal of
+  Statistical Software,* 14(15), 2005.
+- Michael Hahsler, Sudheer Chelluboina, Kurt Hornik, and Christian
+  Buchta. [The arules R-package ecosystem: Analyzing interesting
+  patterns from large transaction
+  datasets.](https://jmlr.csail.mit.edu/papers/v12/hahsler11a.html)
+  *Journal of Machine Learning Research,* 12:1977-1981, 2011.
+- Michael Hahsler. [ARULESPY: Exploring association rules and frequent
+  itemsets in Python.](http://dx.doi.org/10.48550/arXiv.2305.15263)
+  arXiv:2305.15263 \[cs.DB\], May 2023.
+- Michael Hahsler. [An R Companion for Introduction to Data Mining:
+  Chapter
+  5](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/association-analysis-basic-concepts.html),
+  2021, URL:
+  <https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/>
+- Hahsler, Michael. [A Probabilistic Comparison of Commonly Used
+  Interest Measures for Association
+  Rules](https://mhahsler.github.io/arules/docs/measures), 2015, URL:
+  <https://mhahsler.github.io/arules/docs/measures>.
+- Michael Hahsler, Christian Buchta, and Kurt Hornik. [Selective
+  association rule
+  generation.](http://dx.doi.org/10.1007/s00180-007-0062-z)
+  *Computational Statistics,* 23(2):303–315, April 2008.
+- Michael Hahsler and Kurt Hornik. [New probabilistic interest measures
+  for association rules.](http://dx.doi.org/10.3233/IDA-2007-11502)
+  *Intelligent Data Analysis,* 11(5):437–455, 2007.

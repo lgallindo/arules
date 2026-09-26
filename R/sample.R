@@ -1,7 +1,7 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
-#			Bettina Gruen and Kurt Hornik
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta,
+# 			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,26 +17,70 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+setGeneric("sample")
 
+#' Random Samples and Permutations
+#'
+#' Provides the generic function `sample()` and methods to sample from [transactions] and
+#' [associations].
+#'
+#' @name sample
+#' @aliases sample
+#' @family preprocessing
+#' @family associations functions
+#' @family itemMatrix and transactions functions
+#'
+#' @param x object to be sampled from (a set of [associations] or
+#' [transactions]).
+#' @param size sample size.
+#' @param replace a logical. Sample with replacement?
+#' @param prob a numeric vector of probability weights.
+#' @param ...  further arguments.
+#' @return An object of the same class as `x`.
+#' @author Michael Hahsler
+#' @keywords manip
+#' @examples
+#' data("Adult")
+#'
+#' ## sample with replacement
+#' s <- sample(Adult, 500, replace = TRUE)
+#' s
+NULL
 
-##*******************************************************
-## Function sample
-##
-## sample from transactions or associations
+#' @rdname sample
+setMethod(
+  "sample", signature(x = "itemMatrix"),
+  function(
+      x,
+      size,
+      replace = FALSE,
+      prob = NULL,
+      ...) {
+    index <- sample(length(x),
+      size = size,
+      replace = replace,
+      prob = prob
+    )
 
-setMethod("sample", signature(x = "itemMatrix"),
-    function(x, size, replace = FALSE, prob = NULL, ...) {
-        index <- sample(c(1:length(x)), size = size, 
-            replace = replace, prob = prob)
-        
-        x[index]
-    })
+    x[index]
+  }
+)
 
-setMethod("sample", signature(x = "associations"),
-    function(x, size, replace = FALSE, prob = NULL, ...) {
-        index <- sample(c(1:length(x)), size = size, 
-            replace = replace, prob = prob)
-        
-        x[index]
-    })
+#' @rdname sample
+setMethod(
+  "sample", signature(x = "associations"),
+  function(
+      x,
+      size,
+      replace = FALSE,
+      prob = NULL,
+      ...) {
+    index <- sample(length(x),
+      size = size,
+      replace = replace,
+      prob = prob
+    )
 
+    x[index]
+  }
+)

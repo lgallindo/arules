@@ -1,7 +1,326 @@
+# arules 1.7.15.1 (unreleased)
+
+## Documentation and Maintenance
+
+* added missing aliases for plot.associations and plot.itemMatrix.
+
+
+# arules 1.7.15 (09/10/2026)
+
+## New Features
+
+* Added interest measures: Netconf and Zhang’s Measure
+* Added classification measures for rules: accuracy, precision, recall,
+  F-score, and balanced accuracy.
+
+## Bug Fixes
+
+* `predict()`: Fixed block-size handling and block boundaries. Blocked
+  prediction now processes each observation exactly once and correctly handles
+  a single-row `newdata` object.
+* `aggregate()`: Fixed aggregation of `itemsets`, which previously discarded
+  the aggregated object.
+* Fixed the error message produced in non-interactive sessions when a suggested
+  package is not installed.
+* `ruleInduction()` now warns about unknown arguments.
+* Corrected the formulas for collective strength, causal support and
+  confidence, least contradiction, and substitute hyper-confidence.
+* The misspelled interest-measure names `casualSupport` and
+  `casualConfidence` are deprecated. Use `causalSupport` and
+  `causalConfidence` instead.
+* fixed count smoothing for interest measure computation.
+* fixed the bootstrap se attribute.
+
+## Documentation and Maintenance
+
+* Added tests for `aggregate()`, `predict()`, PMML round trips, and
+  `supportingTransactions()`.
+* Switched the test suite explicitly to testthat edition 3.
+* Fixed the random seed initialization in the package vignette.
+* Fixed TYPOs.
+* Improved parameter descriptions and general documentation.
+* Added five short task-oriented R Markdown vignettes.
+
+
+
+# arules 1.7.14 (03/28/2026)
+* Added PROTECT to all getAttr calls in src.
+* Removed deprecated src sparse matrix functions.
+
+# arules 1.7.13 (01/07/2026)
+* Fixed link to arulesCBA in README
+* Fixed mailto in vignette.
+
+# arules 1.7.12 (08/08/2025)
+
+## Changes
+* Fixed partial argument matches.
+
+# arules 1.7-11 (05/28/2025)
+
+## Changes
+* dissimilarity(): The parameter which is now replaced with the logical items. 
+* dissimilarity(): Added cross-dissimilarity calculation for Euclidean distances. Dissimilarities
+  are now computed on the sparse itemMatrix objects and tests were added.
+* We use now the built-in R_chk_memcpy and R_chk_memset.
+
+# arules 1.7-10 (04/22/2025)
+
+## Changes
+* Improved documentation for apriori and eclat. Make clear that a logical
+  matrix is needed.
+  
+## Bug Fix
+* R 4.5.0 changes the pointers for 0-length objects which is problematic with 
+  older implementations of memcpy and some sanitizers. I added the solution
+  used in r-lib/rlang provided by aitap (https://github.com/r-lib/rlang/pull/1797). 
+  The bug was originally reported by MichaelChirico.
+
+# arules 1.7-9 (12/14/2024)
+
+## Internal Changes
+* C code: Legacy variable length arrays in structs use now C99 syntax so
+  that UBSAN's static analysis does not report a non-existing 
+  out-of-bounds violation.
+
+
+# arules 1.7-8 (08/21/2024)
+  
+## Changes
+* Updated tests for testthat edition 3.
+
+## Internal Changes
+* Disable internal ngCMatrix subsetting code which has issues with R-devel.
+  We use now subsetting provided by package Matrix which is almost as fast.
+* Disable internal code for rowSums and colSums for ngCMatrix. 
+* Internal code for t for ngCMatrix is now only used internally. 
+* The custom code and the exported symbols are now deprecated and will be 
+  removed in the next major release.
+
+## Bugfixes
+* Fixed 'Error in .basicRuleMeasure(..) unused argument 
+  (complement = TRUE)' reported by bachnguyen-tomo.
+* Added package anchors in man pages for ngCMatrix-class.
+
+# arules 1.7-7 (11/28/2023)
+
+## Changes
+* is.significant gained parameter reuse. The default for adjust was changed 
+  to "none." 
+* improved some error messages.
+* Added Wikipedia links to measures.md.
+* Added interest measure LIC.
+
+  
+## Bugfixes
+* Fixed appearance code for fim4r (reported by mytarmail).
+  
+
+# arules 1.7-6 (03/23/2023)
+
+## Changes
+* Improved the interface for fim4r. support and confidence now uses [0, 1]; added verbose 
+  and originalSupport. 
+
+## Bugfixes
+* eclat and apriori now use the next smaller representable double for minsupp to make sure that >= minsupp works.
+
+# arules 1.7-5 (10/20/2022)
+
+## Bugfixes
+* discretize(): dig.lab is now correctly passed on to cut() (reported by LectronPusher).
+* Fixed C prototype warnings
+
+# arules 1.7-4 (8/16/2022)
+
+## Changes
+
+* We install now the latest version of fim4r
+* Changes in coercion for Matrix 1.4-2
+
+## Bugfixes
+
+* eclat() now correctly returns frequent itemsets when all have exactly minsupport (reported by GauthierMagnin).
+
+# arules 1.7-3 (1/9/2022)
+
+## Changes
+
+* Manual pages are now created using roxygen2.
+* support() uses now explicit arguments instead of control.
+* ruleInduction() uses now explicit arguments instead of control.
+
+## New Feature
+
+* Added interface to fim4r algorithms.
+
+#  arules 1.7-2 (12/09/2021)
+
+## New Feature
+
+* The C APRIORI implementation can now mine frequent generator itemsets (contributed by Makh2018).
+
+## Bugfixes
+
+* deparse1() needs R 4.0.0
+
+# arules 1.7-1 (11/18/2021)
+
+## Bugfixes
+
+* Fixed some C issues: unsigned int in bitmat.c (function static int _exists) to ensure bit shifting works. The bitmap support buffer is now initialized with zeros. 
+
+# arules 1.7-0 (11/12/2021)
+
+## New Feature
+
+* Constructors and conversion
+  * constructor transactions() can now also create transactions from data in long format (tid, item).
+  * rules and itemsets have now a constructor.
+  * toLongFormat converts transactions into a long format data.frame.
+
+* Interest measures
+  * interestMeasure for rules has now measure "table" which returns the contingency table. 
+  * new interest measure "riskRatio" was added. 
+  * interestMeasure for contingency table-based measures now accept the additional parameter smoothCounts 
+    which is added to each count to avoid counts of zero (Laplace smoothing). 
+  * new method for stats confint to calculate confidence intervals for some interest measures added.
+  * is_redundant can now also use confidence intervals to determine statistical redundancy.
+  * removed option "chiSquared" from crossTable.
+
+* Mining algorithms
+  * apriori and eclat gain ... additional arguments are now added to the parameter list.
+  * added new function is.generators to find itemset generators.
+  * apriori and eclat now store the call in the info slot of the created associations.
+
+## Changes
+* we use now a better check for installed suggested packages.
+* inspect uses now a space after the comma.
+* interestMeasures: reuse = TRUE now only reuses the basic measures of "support", "confidence", "coverage" and
+  "lift". All other measures are recalculated to account for possible differences in additional parameters.
+* set methods are now also exported as S3 methods using package generics so they do not conflict with tidyverse (dplyr). 
+
+## Bug Fixes
+* fixed mistake in man page for weclat. Weight column needs to be called weight (reported by Alexander Ruth).
+* frequent itemsets now do not report "transIdenticalToItemsets" (reported by galadrielbriere). 
+* fixed read.transactions reading in single format with header from a connection. First item is no longer dropped.
+
+# arules 1.6-8 (05/17/2021)
+
+## New Feature
+* transactions have now a constructor function called transactions().
+* Added new method compatible() to itemMatrix to check if the item coding is compatible 
+  between two objects.
+* c() now produces a warning if two itemMatrices with different itemCoding are combined.
+* encode and recode accept now for itemLabels also objects with an itemLabels method.
+* recode is now also available for associations (itemsets and rules). 
+
+## Changes
+* recode: parameter match is now deprecated. Use itemLabels
+
+## Bug Fixes
+* fixed addAggregate problem with character (reported by javiercoh).
+
+# arules 1.6-7 (03/12/2021)
+
+## New Features
+* Added interest measure confidence boost (boost) with help from Jens Harbers, Cordes & Graefe KG.
+
+## Bug Fixes
+* interest measure improvement now does not produce inf values if no subset rule can be found. 
+
+
+# arules 1.6-6 (05/14/2020)
+
+## New Features
+* added interestMeasure rhsSupport.
+* added interestMeasure stdLift.
+* addComplement now adds variables and levels to indicate what items are complments.
+
+## Changes
+* apriori and eclat now by default also reports coverage (ext defaults to TRUE and lhs.support is now called coverage).
+* addComplement now adds variables and levels itemInfo.
+* discretize now drops non-unique breaks with a warning (instead of producing an error).
+
+## Bug Fixes
+* DATAFRAME now works if itemsetInfo is empty.
+* interestMeasure hyperlift now works without specifying transactions. 
+* Changed c() to as.integer() for factors (R has changed).
+
+# arules 1.6-5 (04/03/2020)
+
+## New Features
+* improved speed for calculating interestMeasures for rules and itemsets with no available 
+  quality information or reuse = FALSE.
+* Manual pages for associations were improved with examples for itemCoding.
+* Manual page for interestMeasures is now linked with the associated web page.
+* interest measure laplace (Laplace confidence) gained parameter k for the number of classes.
+
+## Bug Fixes
+* read.transactions: Parameter encoding is now correctly passed on to scan (reported by Sisi-Wiciel).
+* interestMeasure was not calculating count for itemsets (reported by clcazer).
+* removed the duplicated interest measure: "descriptiveConfirm" use "confirmedConfidence" instead.
+
+# arules 1.6-4 (08/27/2019)
+
+## Bug Fixes
+* Fixed rounding bug affecting is.closed (reported by clcazer).
+* Fixed TYPO in Ralambondrainy Measure (reported by andreijl).
+
+
+# arules 1.6-3 (03/06/2019)
+
+## New Features
+* read.transactions gained parameter header to read files with column headers.
+
+## Bug Fixes
+* Fixed PROTECT placement in C code discovered by rchk.
+* S4 objects use now show instead of print.
+
+
+# arules 1.6-2 (12/02/2018)
+
+## New Features
+* discretizeDF now understands the method "none" which skips discretization.
+* discretizeDF now reports which column produces the problem.
+
+## Changes
+* transactions: numeric columns are now discretized during coercion using discretizeDF (with a warning).
+
+## Bug Fixes
+* The spurious warning for reaching maxlen in apriori is now removed (reported by Ryan J. Cole).
+* Fixed matrix check in function dissimilarity. 
+
+# arules 1.6-1 (04/04/2018)
+
+## Bug Fixes
+* discretize now handles NAs in equal frequency (reported by yarik1988).
+* interestMeasure: fixed error when an itemset/rules object of length 0 is provided.
+
+## New Features
+* rules and itemsets gained a method for nitems.
+  
+
+# arules 1.6-0 (2/28/2018)
+
+## Major Changes
+* discretize: the default method is now "frequency" and categories was 
+    renamed breaks to be consistent with cut in R-base.
+
+## New Features
+* Added interest measure "importance".
+* Added method items for transactions.
+* Added discretizeDF to apply discretization to all numeric 
+  columns in a data.frame.
+
+## Bug Fixes
+* Fixed typo in inspect for tidLists (reported by Carlos Chavarria). 
+* Fixed bug in %in% for itemMatrix (reported by Henrique Lemos)
+
 # arules 1.5-5 (01/09/2018)
 
 ## New Features
-* Added (absolut support) "count" as an interest measure. 
+* Added (absolute support) "count" as an interest measure. 
 * itemLabels can now be assigned for rules and itemsets. 
 
 ## Bug Fixes
@@ -29,7 +348,7 @@
 
 ## Bug Fixes
 * Improved PROTECT placement in C source code.
-* itemMeasures for single rules/itemssets now returns a proper data.frame 
+* itemMeasures for single rules/itemsets now returns a proper data.frame 
    (reported by lordbitin).
 * itemMeasures: Added missing parentheses in kappa calculation and fixed
     equation for least contradiction (reported by Feng Chen). 
@@ -149,7 +468,7 @@
 * subset extraction: added checks, handles now NAs and recycles for logical.
 * read.transactions gained arguments skip and quote and some defaults for
   read and write (uses now quotes and no rownames by default) have changed.
-* itemMatrix: coersion from matrix checks now for 0-1 matrix with a warning.
+* itemMatrix: coercion from matrix checks now for 0-1 matrix with a warning.
 * APRIORI and ECLAT report now absolute minimum support.
 * APRIORI: out-of-memory while rule building does now result in an error and
   not a memory fault.
@@ -337,4 +656,3 @@
 # arules 0.1-0 (4/15/2005)
 
 * Alpha and beta versions
-

@@ -1,7 +1,7 @@
 #######################################################################
 # arules - Mining Association Rules and Frequent Itemsets
-# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta, 
-#			Bettina Gruen and Kurt Hornik
+# Copyright (C) 2011-2015 Michael Hahsler, Christian Buchta,
+# 			Bettina Gruen and Kurt Hornik
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,56 +17,180 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+#' Set Operations
+#'
+#' Provides the generic functions and the methods for the set operations
+#' `union()`, `intersect()`, `setequal()`, `setdiff()` and
+#' `is.element()` on sets of [associations] (e.g., [rules], [itemsets]) and
+#' [itemMatrix].
+#'
+#' Technical note: All S4 methods for set operations are defined for the class name
+#' `"ANY"` in the signature, so they should work for all S4 classes for
+#' which the following methods are available: [match()], [length()] and
+#' [unique()].
+#'
+#' @name sets
+#' @aliases setOperations sets
+#' @family associations functions
+#' @family itemMatrix and transactions functions
+#'
+#' @param x,y,el,set sets of associations or itemMatrix objects.
+#' @param ...  Other arguments are unused.
+#' @return `union()`, `intersect()`, `setequal()` and `setdiff()`
+#' return an object of the same class as `x` and `y`.
+#'
+#' `is.element()` returns a logic vector of length `el` indicating for
+#' each element if it is included in `set`.
+#' @author Michael Hahsler
+#' @keywords manip
+#' @examples
+#' data("Adult")
+#'
+#' ## mine some rules
+#' r <- apriori(Adult)
+#'
+#' ## take 2 subsets
+#' r1 <- r[1:10]
+#' r2 <- r[6:15]
+#'
+#' union(r1, r2)
+#' intersect(r1, r2)
+#' setequal(r1, r2)
+#'
+NULL
+
+setGeneric("setdiff")
+setGeneric("setequal")
+setGeneric("intersect")
+setGeneric("is.element")
+setGeneric("union")
+
+# we now export S3 and S4 versions
+
+#' @rdname sets
+#' @method union itemMatrix
+union.itemMatrix <- function(x, y, ...) {
+  unique(c(x, y))
+}
+
+#' @rdname sets
+#' @method union associations
+union.associations <- union.itemMatrix
+
+#' @rdname sets
+setMethod("union", "associations", union.associations)
+
+#' @rdname sets
+setMethod("union", "itemMatrix", union.itemMatrix)
+
+#' @rdname sets
+#' @method intersect itemMatrix
+intersect.itemMatrix <- function(x, y, ...) {
+  unique(y[match(x, y, 0L)])
+}
+
+#' @rdname sets
+#' @method intersect associations
+intersect.associations <- intersect.itemMatrix
+
+#' @rdname sets
+setMethod("intersect", "associations", intersect.associations)
+
+#' @rdname sets
+setMethod("intersect", "itemMatrix", intersect.itemMatrix)
 
 
-##*****************************************************************
-## Basic set operations:  union, intersect, setequal, ... 
-## as defined in base; worke now for all classes which implement 
-## unique, match and length (in arules associations and itemMatrix). 
-##
+#' @rdname sets
+#' @method setequal itemMatrix
+setequal.itemMatrix <- function(x, y, ...) {
+  if (!compatible(x, y)) {
+    warning("Item coding not compatible, recoding item matrices first.")
+  }
+    
+  all(c(match(x, y, 0L, incomparables = TRUE) > 0L, 
+        match(y, x, 0L, incomparables = TRUE) > 0L))
+}
 
+#' @rdname sets
+#' @method setequal associations
+setequal.associations <- setequal.itemMatrix
 
-setMethod("union", signature(x = "associations", y = "associations"),
-    function(x, y) unique(c(x, y)) 
-) 
+#' @rdname sets
+setMethod("setequal", "associations", setequal.associations)
 
-setMethod("union", signature(x = "itemMatrix", y = "itemMatrix"),
-    function(x, y) unique(c(x, y)) 
-) 
+#' @rdname sets
+setMethod("setequal", "itemMatrix", setequal.itemMatrix)
 
-setMethod("intersect", signature(x = "associations", y = "associations"),
-    function(x, y) unique(y[match(x, y, 0L)])
-)
+#' @rdname sets
+#' @method setdiff itemMatrix
+setdiff.itemMatrix <- function(x, y, ...) {
+  unique(if (length(x) || length(y)) x[match(x, y, 0L) == 0L] else x)
+}
 
-setMethod("intersect", signature(x = "itemMatrix", y = "itemMatrix"),
-    function(x, y) unique(y[match(x, y, 0L)])
-)
+#' @rdname sets
+#' @method setdiff associations
+setdiff.associations <- setdiff.itemMatrix
 
-setMethod("setequal", signature(x = "associations", y = "associations"),
-    function(x, y) all(c(match(x, y, 0L) > 0L, match(y, x, 0L) > 0L))
-)
+#' @rdname sets
+setMethod("setdiff", "associations", setdiff.associations)
 
-setMethod("setequal", signature(x = "itemMatrix", y = "itemMatrix"),
-    function(x, y) all(c(match(x, y, 0L) > 0L, match(y, x, 0L) > 0L))
-)
+#' @rdname sets
+setMethod("setdiff", "itemMatrix", setdiff.itemMatrix)
 
-setMethod("setdiff", signature(x = "associations", y = "associations"),
-    function(x, y) 
-    unique(if (length(x) || length(y)) x[match(x, y, 0L) == 0L] else x)
-)
+#' @rdname sets
+#' @method is.element itemMatrix
+is.element.itemMatrix <- function(el, set, ...) {
+  match(el, set, 0L) > 0L
+}
 
-setMethod("setdiff", signature(x = "itemMatrix", y = "itemMatrix"),
-    function(x, y) 
-    unique(if (length(x) || length(y)) x[match(x, y, 0L) == 0L] else x)
-)
+#' @rdname sets
+#' @method is.element associations
+is.element.associations <- is.element.itemMatrix
 
-setMethod("is.element", signature(el = "associations", set = "associations"),
-    function(el, set) match(el, set, 0L) > 0L 
-)
+#' @rdname sets
+setMethod("is.element", "associations", is.element.associations)
 
-setMethod("is.element", signature(el = "itemMatrix", set = "itemMatrix"),
-    function(el, set) match(el, set, 0L) > 0L 
-)
+#' @rdname sets
+setMethod("is.element", "itemMatrix", is.element.itemMatrix)
 
-## 
-
+# setMethod("union", signature(x = "associations", y = "associations"),
+#     function(x, y) unique(c(x, y))
+# )
+#
+# setMethod("union", signature(x = "itemMatrix", y = "itemMatrix"),
+#     function(x, y) unique(c(x, y))
+# )
+#
+# setMethod("intersect", signature(x = "associations", y = "associations"),
+#     function(x, y) unique(y[match(x, y, 0L)])
+# )
+#
+# setMethod("intersect", signature(x = "itemMatrix", y = "itemMatrix"),
+#     function(x, y) unique(y[match(x, y, 0L)])
+# )
+#
+# setMethod("setequal", signature(x = "associations", y = "associations"),
+#     function(x, y) all(c(match(x, y, 0L) > 0L, match(y, x, 0L) > 0L))
+# )
+#
+# setMethod("setequal", signature(x = "itemMatrix", y = "itemMatrix"),
+#     function(x, y) all(c(match(x, y, 0L) > 0L, match(y, x, 0L) > 0L))
+# )
+#
+# setMethod("setdiff", signature(x = "associations", y = "associations"),
+#     function(x, y)
+#     unique(if (length(x) || length(y)) x[match(x, y, 0L) == 0L] else x)
+# )
+#
+# setMethod("setdiff", signature(x = "itemMatrix", y = "itemMatrix"),
+#     function(x, y)
+#     unique(if (length(x) || length(y)) x[match(x, y, 0L) == 0L] else x)
+# )
+#
+# setMethod("is.element", signature(el = "associations", set = "associations"),
+#     function(el, set) match(el, set, 0L) > 0L
+# )
+#
+# setMethod("is.element", signature(el = "itemMatrix", set = "itemMatrix"),
+#     function(el, set) match(el, set, 0L) > 0L
+# )
